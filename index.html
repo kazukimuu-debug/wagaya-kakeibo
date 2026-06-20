@@ -1,92 +1,12 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>わが家のお金</title>
-
-<style>
-body{
-font-family:-apple-system,sans-serif;
-background:#f5f5f5;
-max-width:500px;
-margin:auto;
-padding:15px;
-}
-
-.card{
-background:white;
-padding:20px;
-border-radius:15px;
-margin-bottom:15px;
-}
-
-input,select,button{
-width:100%;
-padding:12px;
-margin-top:10px;
-box-sizing:border-box;
-}
-
-button{
-background:#4F46E5;
-color:white;
-border:none;
-border-radius:10px;
-}
-
-#total{
-font-size:32px;
-font-weight:bold;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-}
-
-td{
-padding:8px;
-border-bottom:1px solid #ddd;
-}
-</style>
-</head>
-<body>
-
-<div class="card">
-<h1>🏠 わが家のお金</h1>
-
-<h2>今月の支出</h2>
-
-<div id="total">0円</div>
-
-<select id="category">
-<option>食費</option>
-<option>外食費</option>
-<option>日用品費</option>
-<option>レジャー費</option>
-<option>ガソリン費</option>
-<option>予備費</option>
-</select>
-
-<input id="amount" type="number" placeholder="金額">
-
-<button onclick="addExpense()">
-追加する
-</button>
-
-</div>
-
-<div class="card">
-<h2>履歴</h2>
-
-<table>
-<tbody id="history"></tbody>
-</table>
-
-</div>
-
 <script>
+const budgets={
+"食費":50000,
+"外食費":15000,
+"レジャー費":20000,
+"日用品費":10000,
+"ガソリン費":10000,
+"予備費":20000
+};
 
 let data=JSON.parse(localStorage.getItem("wagaya")||"[]");
 
@@ -121,15 +41,54 @@ save();
 
 function render(){
 
-let total=0;
+let totalBudget=0;
+Object.values(budgets).forEach(x=>totalBudget+=x);
 
-let html="";
+let spent=0;
+
+const used={};
+Object.keys(budgets).forEach(k=>used[k]=0);
+
+data.forEach(x=>{
+spent+=x.amount;
+used[x.category]+=x.amount;
+});
+
+document.getElementById("totalBudget").innerHTML=
+"¥"+totalBudget.toLocaleString();
+
+document.getElementById("spent").innerHTML=
+"¥"+spent.toLocaleString();
+
+document.getElementById("remaining").innerHTML=
+"¥"+(totalBudget-spent).toLocaleString();
+
+let budgetHtml="";
+
+Object.keys(budgets).forEach(k=>{
+
+const remain=budgets[k]-used[k];
+
+budgetHtml+=`
+<tr>
+<td>${k}</td>
+<td>¥${budgets[k].toLocaleString()}</td>
+<td>¥${used[k].toLocaleString()}</td>
+<td style="color:${remain<0?'red':'black'}">
+¥${remain.toLocaleString()}
+</td>
+</tr>
+`;
+
+});
+
+document.getElementById("budgetTable").innerHTML=budgetHtml;
+
+let hist="";
 
 data.forEach((x,i)=>{
 
-total+=x.amount;
-
-html+=`
+hist+=`
 <tr>
 <td>${x.category}</td>
 <td>¥${x.amount.toLocaleString()}</td>
@@ -143,16 +102,10 @@ html+=`
 
 });
 
-document.getElementById("history").innerHTML=html;
-
-document.getElementById("total").innerHTML=
-total.toLocaleString()+"円";
+document.getElementById("history").innerHTML=hist;
 
 }
 
 render();
 
 </script>
-
-</body>
-</html>
