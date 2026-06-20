@@ -2,288 +2,73 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>🏠 村上家のお金</title>
-
-<style>
-body{
-font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-max-width:600px;
-margin:auto;
-padding:16px;
-background:#f7f7f7;
-}
-
-.card{
-background:white;
-padding:16px;
-border-radius:16px;
-margin-bottom:16px;
-}
-
-h1,h2{
-margin:0 0 12px;
-}
-
-input,select,button{
-width:100%;
-padding:12px;
-margin-top:8px;
-box-sizing:border-box;
-border-radius:10px;
-border:1px solid #ddd;
-font-size:16px;
-}
-
-button{
-background:#4F46E5;
-color:white;
-border:none;
-}
-
-.row{
-display:flex;
-justify-content:space-between;
-margin:8px 0;
-}
-
-.over{
-color:red;
-font-weight:bold;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-}
-
-th,td{
-padding:8px;
-border-bottom:1px solid #eee;
-text-align:left;
-}
-
-.small{
-font-size:12px;
-color:#666;
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<h1>🏠 わが家のお金</h1>
-
+<h1>🏠 村上家のお金</h1>
 <div class="card">
 <h2>今月の状況</h2>
-
 <div class="row">
 <span>総予算</span>
 <strong id="totalBudget"></strong>
 </div>
-
 <div class="row">
 <span>使用額</span>
 <strong id="spent"></strong>
 </div>
-
 <div class="row">
 <span>残額</span>
 <strong id="remaining"></strong>
 </div>
-
 </div>
-
 <div class="card">
-
 <h2>支出入力</h2>
-
 <select id="category">
 <option>食費</option>
 <option>外食/レジャー費</option>
 <option>日用品費</option>
 <option>ガソリン費</option>
 </select>
-
 <input id="amount" type="number" placeholder="金額">
-
 <input id="memo" placeholder="メモ（任意）">
-
 <button onclick="addExpense()">
 追加する
 </button>
-
 </div>
-
 <div class="card">
+<h2>予算設定</h2>
 
+食費
+外食/レジャー費
+日用品費
+ガソリン費
+<button onclick="saveBudgets()">
+予算を保存
+</button>
+</div>
+<div class="card">
 <h2>予算管理</h2>
-
 <table>
 <thead>
 <tr>
 <th>項目</th>
-<th>予算</th>
-<th>使用</th>
 <th>残り</th>
 </tr>
 </thead>
-
 <tbody id="budgetTable"></tbody>
-
 </table>
-
 </div>
-
 <div class="card">
-
 <h2>履歴</h2>
-
 <table>
-
-<thead>
-<tr>
-<th>項目</th>
-<th>金額</th>
-<th>メモ</th>
-<th></th>
-</tr>
-</thead>
-
 <tbody id="history"></tbody>
-
 </table>
-
 </div>
-
-<script>
-
-const budgets={
-"食費":40000,
-"外食/レジャー費":8000,
-"日用品費":20000,
-"ガソリン費":5000
-};
-
-let data=JSON.parse(
-localStorage.getItem("wagaya_kakeibo")||"[]"
-);
-
-function save(){
-localStorage.setItem(
-"wagaya_kakeibo",
-JSON.stringify(data)
-);
-render();
-}
-
-function addExpense(){
-
-const amount=
-Number(document.getElementById("amount").value);
-
-if(!amount)return;
-
-data.push({
-category:document.getElementById("category").value,
-amount:amount,
-memo:document.getElementById("memo").value
-});
-
-document.getElementById("amount").value="";
-document.getElementById("memo").value="";
-
-save();
-
-}
-
-function del(i){
-data.splice(i,1);
-save();
-}
-
-function render(){
-
-let totalBudget=0;
-
-Object.values(budgets).forEach(x=>{
-totalBudget+=x;
-});
-
-let spent=0;
-
-const used={};
-
-Object.keys(budgets).forEach(k=>{
-used[k]=0;
-});
-
-data.forEach(x=>{
-spent+=x.amount;
-used[x.category]+=x.amount;
-});
-
-document.getElementById("totalBudget").innerHTML=
-"¥"+totalBudget.toLocaleString();
-
-document.getElementById("spent").innerHTML=
-"¥"+spent.toLocaleString();
-
-document.getElementById("remaining").innerHTML=
-"¥"+(totalBudget-spent).toLocaleString();
-
-let budgetHtml="";
-
-Object.keys(budgets).forEach(k=>{
-
-const remain=budgets[k]-used[k];
-
-budgetHtml+=`
-<tr>
-<td>${k}</td>
-<td>¥${budgets[k].toLocaleString()}</td>
-<td>¥${used[k].toLocaleString()}</td>
-<td class="${remain<0?'over':''}">
-¥${remain.toLocaleString()}
-</td>
-</tr>
-`;
-
-});
-
-document.getElementById("budgetTable").innerHTML=
-budgetHtml;
-
-let hist="";
-
-data.forEach((x,i)=>{
-
-hist+=`
-<tr>
-<td>${x.category}</td>
-<td>¥${x.amount.toLocaleString()}</td>
-<td>${x.memo||""}</td>
-<td>
-<button onclick="del(${i})">
-削除
+<button class="danger" onclick="resetMonth()">
+⚠️ 今月をリセット
 </button>
-</td>
-</tr>
-`;
-
-});
-
-document.getElementById("history").innerHTML=
-hist;
-
-}
-
-render();
-
-</script>
-
-<p class="small">
-iPhoneでは「共有」→「ホーム画面に追加」でアプリ風に使えます。
-</p>
-
+<script src="app.js"></script>
 </body>
 </html>
