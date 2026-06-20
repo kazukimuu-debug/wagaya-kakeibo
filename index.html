@@ -1,70 +1,137 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>🏠 村上家のお金</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>🏠 わが家のお金</title>
+
+  <link rel="stylesheet" href="style.css">
+
 </head>
 <body>
-<h1>🏠 村上家のお金</h1>
-<div class="card">
-<h2>今月の状況</h2>
-<div class="row">
-<span>総予算</span>
-<strong id="totalBudget"></strong>
-</div>
-<div class="row">
-<span>使用額</span>
-<strong id="spent"></strong>
-</div>
-<div class="row">
-<span>残額</span>
-<strong id="remaining"></strong>
-</div>
-</div>
-<div class="card">
-<h2>支出入力</h2>
-<select id="category">
-<option>食費</option>
-<option>外食/レジャー費</option>
-<option>日用品費</option>
-<option>ガソリン費</option>
-</select>
-<input id="amount" type="number" placeholder="金額">
-<input id="memo" placeholder="メモ（任意）">
-<button onclick="addExpense()">
-追加する
-</button>
-</div>
-<div class="card">
-<h2>予算設定</h2>
 
-<button onclick="saveBudgets()">
-予算を保存
-</button>
-</div>
+<h1>🏠 わが家のお金</h1>
+
 <div class="card">
-<h2>予算管理</h2>
-<table>
-<thead>
-<tr>
-<th>項目</th>
-<th>残り</th>
-</tr>
-</thead>
-<tbody id="budgetTable"></tbody>
-</table>
+
+  <h2>今月の状況</h2>
+
+  <div class="row">
+    <span>総予算</span>
+    <strong id="totalBudget"></strong>
+  </div>
+
+  <div class="row">
+    <span>使用額</span>
+    <strong id="spent"></strong>
+  </div>
+
+  <div class="row">
+    <span>残額</span>
+    <strong id="remaining"></strong>
+  </div>
+
 </div>
+
 <div class="card">
-<h2>履歴</h2>
-<table>
-<tbody id="history"></tbody>
-</table>
+
+  <h2>支出入力</h2>
+
+  <select id="category">
+    <option>食費</option>
+    <option>外食/レジャー費</option>
+    <option>日用品費</option>
+    <option>ガソリン費</option>
+  </select>
+
+  <input
+    id="amount"
+    type="number"
+    placeholder="金額">
+
+  <input
+    id="memo"
+    placeholder="メモ（任意）">
+
+  <button onclick="addExpense()">
+    追加する
+  </button>
+
 </div>
-<button class="danger" onclick="resetMonth()">
-⚠️ 今月をリセット
+
+<div class="card">
+
+  <h2>予算設定</h2>
+
+  <label>食費</label>
+  <input id="budgetFood" type="number">
+
+  <label>外食/レジャー費</label>
+  <input id="budgetLeisure" type="number">
+
+  <label>日用品費</label>
+  <input id="budgetDaily" type="number">
+
+  <label>ガソリン費</label>
+  <input id="budgetGas" type="number">
+
+  <button onclick="saveBudgets()">
+    予算を保存
+  </button>
+
+</div>
+
+<div class="card">
+
+  <h2>予算管理</h2>
+
+  <table>
+
+    <thead>
+      <tr>
+        <th>項目</th>
+        <th>残り</th>
+      </tr>
+    </thead>
+
+    <tbody id="budgetTable">
+    </tbody>
+
+  </table>
+
+</div>
+
+<div class="card">
+
+  <h2>履歴</h2>
+
+  <table>
+
+    <thead>
+      <tr>
+        <th>項目</th>
+        <th>金額</th>
+        <th>メモ</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody id="history">
+    </tbody>
+
+  </table>
+
+</div>
+
+<button
+  class="danger"
+  onclick="resetMonth()">
+
+  ⚠️ 今月をリセット
+
 </button>
+
 <script src="app.js"></script>
+
 </body>
 </html>
