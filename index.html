@@ -1,137 +1,218 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>🏠 わが家のお金</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🏠 わが家のお金</title>
 
-  <link rel="stylesheet" href="style.css">
+<style>
 
+body{
+font-family:-apple-system,sans-serif;
+max-width:600px;
+margin:auto;
+padding:16px;
+background:#f5f5f5;
+}
+
+.card{
+background:white;
+padding:16px;
+border-radius:16px;
+margin-bottom:16px;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+margin:8px 0;
+}
+
+input,select,button{
+width:100%;
+padding:12px;
+margin-top:8px;
+box-sizing:border-box;
+font-size:16px;
+border-radius:10px;
+border:1px solid #ddd;
+}
+
+button{
+background:#4F46E5;
+color:white;
+border:none;
+}
+
+.danger{
+background:#d32f2f;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:10px;
+border-bottom:1px solid #eee;
+text-align:left;
+}
+
+.over{
+color:red;
+font-weight:bold;
+}
+
+</style>
 </head>
+
 <body>
 
 <h1>🏠 わが家のお金</h1>
 
 <div class="card">
 
-  <h2>今月の状況</h2>
+<h2>今月の状況</h2>
 
-  <div class="row">
-    <span>総予算</span>
-    <strong id="totalBudget"></strong>
-  </div>
+<div class="row">
+<span>総予算</span>
+<strong id="totalBudget"></strong>
+</div>
 
-  <div class="row">
-    <span>使用額</span>
-    <strong id="spent"></strong>
-  </div>
+<div class="row">
+<span>使用額</span>
+<strong id="spent"></strong>
+</div>
 
-  <div class="row">
-    <span>残額</span>
-    <strong id="remaining"></strong>
-  </div>
+<div class="row">
+<span>残額</span>
+<strong id="remaining"></strong>
+</div>
 
 </div>
 
 <div class="card">
 
-  <h2>支出入力</h2>
+<h2>支出入力</h2>
 
-  <select id="category">
-    <option>食費</option>
-    <option>外食/レジャー費</option>
-    <option>日用品費</option>
-    <option>ガソリン費</option>
-  </select>
+<select id="category">
 
-  <input
-    id="amount"
-    type="number"
-    placeholder="金額">
+<option>食費</option>
 
-  <input
-    id="memo"
-    placeholder="メモ（任意）">
+<option>外食/レジャー費</option>
 
-  <button onclick="addExpense()">
-    追加する
-  </button>
+<option>日用品費</option>
 
-</div>
+<option>ガソリン費</option>
 
-<div class="card">
+</select>
 
-  <h2>予算設定</h2>
+<input
+id="amount"
+type="number"
+placeholder="金額">
 
-  <label>食費</label>
-  <input id="budgetFood" type="number">
+<input
+id="memo"
+placeholder="メモ（任意）">
 
-  <label>外食/レジャー費</label>
-  <input id="budgetLeisure" type="number">
+<button onclick="addExpense()">
 
-  <label>日用品費</label>
-  <input id="budgetDaily" type="number">
+追加する
 
-  <label>ガソリン費</label>
-  <input id="budgetGas" type="number">
-
-  <button onclick="saveBudgets()">
-    予算を保存
-  </button>
+</button>
 
 </div>
 
 <div class="card">
 
-  <h2>予算管理</h2>
+<h2>予算設定</h2>
 
-  <table>
+<label>食費</label>
 
-    <thead>
-      <tr>
-        <th>項目</th>
-        <th>残り</th>
-      </tr>
-    </thead>
+<input id="budgetFood" type="number">
 
-    <tbody id="budgetTable">
-    </tbody>
+<label>外食/レジャー費</label>
 
-  </table>
+<input id="budgetLeisure" type="number">
+
+<label>日用品費</label>
+
+<input id="budgetDaily" type="number">
+
+<label>ガソリン費</label>
+
+<input id="budgetGas" type="number">
+
+<button onclick="saveBudgets()">
+
+予算を保存
+
+</button>
 
 </div>
 
 <div class="card">
 
-  <h2>履歴</h2>
+<h2>予算管理</h2>
 
-  <table>
+<table>
 
-    <thead>
-      <tr>
-        <th>項目</th>
-        <th>金額</th>
-        <th>メモ</th>
-        <th></th>
-      </tr>
-    </thead>
+<thead>
 
-    <tbody id="history">
-    </tbody>
+<tr>
 
-  </table>
+<th>項目</th>
+
+<th>残り</th>
+
+</tr>
+
+</thead>
+
+<tbody id="budgetTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+<div class="card">
+
+<h2>履歴</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>項目</th>
+
+<th>金額</th>
+
+<th>メモ</th>
+
+<th></th>
+
+</tr>
+
+</thead>
+
+<tbody id="history">
+
+</tbody>
+
+</table>
 
 </div>
 
 <button
-  class="danger"
-  onclick="resetMonth()">
+class="danger"
+onclick="resetMonth()">
 
-  ⚠️ 今月をリセット
+⚠️ 今月をリセット
 
 </button>
-
-<script src="app.js"></script>
-
-</body>
-</html>
